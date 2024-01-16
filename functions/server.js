@@ -59,7 +59,7 @@ app.delete('/.netlify/functions/server/reset-data', async(req, res) => {
 
 //SERVER - LISTENING
 // app.listen(port, () => {
-//   console.log(`Server is running on port ${port}`);
+//   console.log(`Server is running on port ${port}`) ;
 // });
 
 module.exports.handler = serverless(app);
