@@ -1,28 +1,26 @@
 require('dotenv').config();
+const mongoose = require('mongoose');
+const mongoURI = process.env.MONGODB_URI;
 const serverless = require('serverless-http');
 const bodyParser = require('body-parser');
 const express = require('express');
 const cors = require('cors');
-const mysql = require('mysql2');
 const app = express();
 const port = process.env.PORT;
 
 app.use(bodyParser.json());
 app.use(cors());
 
-// mySQL Database Login
-const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: 'Addilsqe13@',
-  database: 'todolist_db',
+// Database
+mongoose.connect(mongoURI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
 });
-db.connect((err) => {
-  if (err) {
-    console.error('Database connection failed:', err);
-  } else {
-    console.log('Connected to the database');
-  }
+
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+db.once('open', () => {
+  console.log('Connected to the database');
 });
 
 //GET - REQUEST
@@ -79,3 +77,5 @@ app.delete('/reset-data', (req, res) => {
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
+
+module.exports.handler = serverless(app);
