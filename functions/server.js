@@ -2,6 +2,7 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const mongoURI = process.env.MONGODB_URI;
 const Tasks = require('./models/Task');
+const Users = require('./models/User');
 const serverless = require('serverless-http');
 const bodyParser = require('body-parser');
 const express = require('express');
@@ -56,10 +57,22 @@ app.delete('/.netlify/functions/server/reset-data', async(req, res) => {
   res.json({success:true});
 });
 
+//POST - for info-weather
+app.post('/.netlify/functions/server/api/add-user', async(req, res) => {
+  const { username, email, city } = req.body;
+  const user = new Users({
+      username: username,
+      email: email,
+      city: city
+    })
+  await user.save();
+  res.json({success:true});
+});
 
-//SERVER - LISTENING
-// app.listen(port, () => {
-//   console.log(`Server is running on port ${port}`) ;
-// });
+
+// SERVER - LISTENING
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`) ;
+});
 
 module.exports.handler = serverless(app);
