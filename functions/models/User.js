@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const {Schema} = mongoose;
 
 const UserSchema = new Schema({
-    usename: {
+    username: {
         type: String,
         required: true
     },
@@ -13,6 +13,10 @@ const UserSchema = new Schema({
     city: {
         type: String,
         required: true
+    },
+    active: {
+        type: Boolean,
+        default: true
     },
     date:{
         type: Date,
